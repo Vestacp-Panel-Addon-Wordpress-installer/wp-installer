@@ -11,8 +11,7 @@ fi
 echo "Let's start..."
 
 # Let's install the CSF Vesta UI!
-function Vestawpinstaller()
-{
+function Vestawpinstaller() {
 	echo "VestaCP Installing WordPress Installer...."
 	
 	mkdir /usr/local/vesta/web/list/wp
@@ -33,4 +32,4 @@ chmod 755 /usr/local/vesta/bin/v-sam-create-wp
 	echo "Done! Check VestaCP!";
 }
 
-Vestawpinstaller
+Vestawpinstaller();
