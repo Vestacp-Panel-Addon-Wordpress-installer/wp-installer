@@ -1,4 +1,9 @@
 <?php
+/*
+# Made by Sam Wattoo
+# Copyright WapKiz Ltd
+# Version: 1.1
+*/
 
 error_reporting(NULL);
  header('Content-Encoding: none;');
