@@ -1,23 +1,14 @@
 <?php
-/*
-# Made by Sam Wattoo
-# Copyright WapKiz Ltd
-# Version: 1.1
-*/
 
 error_reporting(NULL);
- header('Content-Encoding: none;');
 
-        set_time_limit(0);
 ob_start();
 $TAB = 'WP';
 
 // Main include
 include($_SERVER['DOCUMENT_ROOT']."/inc/main.php");
- // header('Content-Type: application/json');
-   
-
 if (isset($_SESSION['user'])) {
+
 	echo '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,14 +31,14 @@ echo '<div class="container"><h2>Wordpress Installer</h2>';
 	$datai = json_decode(implode('', $outputi), true);
 $dati = array_reverse($datao,true);
 $email=$dati["$user"]['CONTACT'];
-	
+	print_r($email);
 	exec (VESTA_CMD."v-list-web-domains $user json", $output, $return_var);
 $data = json_decode(implode('', $output), true);
 $data = array_reverse($data,true);
-echo '<form action="" method="post">
+echo '<div  id="wpform">
     <div class="form-group">
       <label for="domain">Domain:</label>';
-echo '<select name="domain" class="form-control">';
+echo '<select name="domain" id="domain" class="form-control">';
 foreach($data as $dm=>$key){
 echo '<option value="'.$dm.'">'.$dm.'</option>';
  
@@ -56,45 +47,35 @@ echo'</select></div>';
 echo "\n";
 echo ' <div class="form-group">
       <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter custom email" name="email"></div>  <button type="submit" class="btn btn-default">Install</button>
-  </form>';
+      <input type="email" class="form-control" id="email" placeholder="Enter custom email" name="email" value="'.$email.'"></div>  <input type="button" onclick="wpinstall()" class="btn btn-default" value="Install">
+	  <br/>
+	  <div id="loading" style="display:none;"><p class="text-center"><img src="https://i.extraimage.info/pix/KLtQ0.gif" border="0"></p></div>
+	 <div id="output"></div>
+ ';
 	
-	$rootdir = dirname(__FILE__);
-	if(isset($_POST['domain'])){
-		$domain=$_POST['domain'];
-		if(!empty($_POST['email'])){
-		$email=$_POST['email'];}
-  $command='/usr/bin/sudo /usr/local/vesta/bin/v-sam-create-wp "'.$domain.'" "'.$email.'" "'.$user.'"   2>&1'; 
 
-        $handle = popen($command, "r");
-$x=1;
-        if (ob_get_level() == 0) 
-            ob_start();
-
-        while(!feof($handle)) {
-
-            $buffer = fgets($handle);
-           $buffer = trim(htmlspecialchars($buffer));
-		   $ddata.=$buffer.'<br/>';
-		  
-		  
-		    ob_flush();
-            flush();
-			$x++;
-           
-        }
-		$ot=explode('~~~~',$ddata);
-		if(!empty($ot['1'])){
-			echo ' <div class="panel panel-info">
-    <div class="panel-heading">Install Detail</div>
-    <div class="panel-body">';
-		print_r($ot['1']);
-		echo '</div>
-  </div>';
-		 ob_flush();
-            flush();
-		}
-}} else {
-    header("Location: /login/");
-}
 ?>
+<script> 
+function wpinstall() {
+   
+	var e = document.getElementById("domain");
+	var email = document.getElementById("email").value;
+var domain = e.options[e.selectedIndex].value;
+
+ var x = document.getElementById("loading");
+   x.style.display = "block";
+  
+   
+data=samgrab('api.php?domain='+domain+'&email='+email+'');
+document.getElementById("output").innerHTML=data;
+ x.style.display = "none";
+}
+function samgrab(link){var result="";
+$.ajax({url:link,async:false,success:function(data){result=data;}});
+return result;}
+
+</script>
+<?php }else{
+	header("Location: /login/");
+	
+}
