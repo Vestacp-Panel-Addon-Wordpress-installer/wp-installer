@@ -3,7 +3,7 @@
 # Copyright WapKiz Ltd
 # Version: 1.1 
 echo "Lets start..."
-# Let's install the CSF Vesta UI!  
+# Let's install the wordpress installer in Vesta UI!  
 function Vestawpinstaller() { 
 echo "VestaCP Installing WordPress Installer...." 
 mkdir /usr/local/vesta/web/list/wp 
